@@ -5,12 +5,12 @@
 <br/><br/>
 
 <div class="container">
-<div class="card mb-3">
-    <div class="row g-0">
-      <div class="col-md-4">
-        <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+<div class="card mb-5">
+    <div class="row g-1">
+      <div class="col-md-5">
+        <img src="{{ product.image.url }}"  width="450" class="img-fluid rounded-start" alt="...">
       </div>
-      <div class="col-md-8">
+      <div class="col-md-5">
         <div class="text-center">
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
@@ -58,7 +58,9 @@ R {{ product.price }}
         action: 'post'
       },
       success: function(json){
-        console.log(json);
+        //console.log(json);
+        document.getElementById("cart_quantity").
+          textContent = json.qty
       },
       error: function(xhr, errmsg, err){
         console.error(errmsg); // Added error logging for better debugging
