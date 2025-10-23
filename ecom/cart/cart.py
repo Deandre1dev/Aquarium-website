@@ -1,25 +1,32 @@
-class Cart():
+class Cart:
     def __init__(self, request):
         self.session = request.session
+        cart = self.session.get('cart')   # use a consistent key name
 
-        # Get the users curent session key if it exists.
-        cart = self.session.get('session_key')
+        if not cart:
+            # if the user is new, create an empty cart
+            cart = self.session['cart'] = {}
 
-        # if the user is new create a session key.
-        if 'session_key' not in request.session:
-            cart = self.session['session key'] = {}
-
-        # Make sure cart is available on all the web pages.
-        self.cart = cart    
+        self.cart = cart
 
     def add(self, product):
         product_id = str(product.id)
 
-        # Logic to determine if a product should be added into the cart or not
-
+        # If product already in cart, you could increase quantity
         if product_id in self.cart:
-            pass
+            # Example: track quantity
+            self.cart[product_id]['quantity'] += 1
         else:
-            self.cart[product_id] = {'price': str(product.price)}
+            self.cart[product_id] = {
+                'price': str(product.price),
+                'quantity': 1
+            }
 
-        self.session.modified = True  
+        # Mark the session as modified so Django saves it
+        self.session.modified = True
+
+    def __len__(self):
+        """
+        Return the total number of items in the cart (sum of quantities).
+        """
+        return sum(item['quantity'] for item in self.cart.values())
